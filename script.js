@@ -1,17 +1,28 @@
-// JavaScript functionality for the Python IDLE emulator
+// Updated script.js with corrected JavaScript code for Pyodide integration
 
-// Function to initialize the emulator
-function initEmulator() {
-    console.log('Python IDLE Emulator Initialized');
-    // Additional initialization code here
+// Load Pyodide
+async function loadPyodide() {
+    const pyodide = await loadPyodide();
+    await pyodide.loadPackage("numpy");
+    return pyodide;
 }
 
-// Function to execute Python code
-function executePythonCode(code) {
-    console.log('Executing Python Code:
-' + code);
-    // Code execution logic here
+// Execute Python code
+async function executePythonCode(code) {
+    const pyodide = await loadPyodide();
+    try {
+        let output = await pyodide.runPython(code);
+        console.log(output);
+    } catch (err) {
+        console.error(err);
+    }
 }
 
-// Call the init function on load
-window.onload = initEmulator;
+// Example usage
+const pythonCode = `
+import numpy as np
+arr = np.array([1, 2, 3])
+arr.sum()
+`;
+
+executePythonCode(pythonCode);
